@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenPulse - Open Source Community Health Monitor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .search-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-form input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .search-form button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      background: #10B981;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .search-form button:hover {
+      background: #059669;
+    }
+
+    .example-repos {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .example-repo {
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .example-repo:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .results-section {
+      display: none;
+    }
+
+    .results-section.active {
+      display: block;
+    }
+
+    .repo-header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .repo-title {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .repo-url {
+      opacity: 0.8;
+      font-size: 14px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-value {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-label {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .health-score-card {
+      grid-column: span 2;
+      text-align: center;
+    }
+
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: bold;
+      background: conic-gradient(#10B981 0deg, #10B981 var(--score-deg), rgba(255,255,255,0.2) var(--score-deg));
+      position: relative;
+    }
+
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: #1E3A8A;
+    }
+
+    .score-value {
+      position: relative;
+      z-index: 1;
+    }
+
+    .lifecycle-badge {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.2);
+      margin-top: 10px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #10B981;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .alert-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 4px solid;
+    }
+
+    .alert.green { background: rgba(16, 185, 129, 0.2); border-color: #10B981; }
+    .alert.yellow { background: rgba(245, 158, 11, 0.2); border-color: #F59E0B; }
+    .alert.orange { background: rgba(249, 115, 22, 0.2); border-color: #F97316; }
+    .alert.red { background: rgba(239, 68, 68, 0.2); border-color: #EF4444; }
+
+    .alert-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 2px solid #EF4444;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px 0;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔮 OpenPulse</h1>
+      <p>Open Source Community Health Monitoring & Early Warning Platform</p>
+    </div>
+
+    <div class="search-section">
+      <form class="search-form" id="searchForm">
+        <input
+          type="text"
+          id="repoInput"
+          placeholder="Enter GitHub repository (e.g., apache/iotdb or https://github.com/apache/iotdb)"
+          required
+        >
+        <button type="submit">🔍 Analyze</button>
+      </form>
+      <div class="example-repos">
+        <span style="opacity: 0.7; margin-right: 10px;">Try examples:</span>
+        <div class="example-repo" data-repo="apache/iotdb">apache/iotdb</div>
+        <div class="example-repo" data-repo="easy-graph/Easy-Graph">easy-graph/Easy-Graph</div>
+        <div class="example-repo" data-repo="X-lab2017/open-digger">X-lab2017/open-digger</div>
+        <div class="example-repo" data-repo="dataease/dataease">dataease/dataease</div>
+      </div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Analyzing repository health...</p>
+    </div>
+
+    <div id="error" class="error" style="display: none;">
+      <h2>⚠️ Error</h2>
+      <p id="errorMessage"></p>
+    </div>
+
+    <div id="results" class="results-section">
+      <div class="repo-header">
+        <div class="repo-title" id="repoTitle">Repository Name</div>
+        <div class="repo-url" id="repoUrl">https://github.com/owner/repo</div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card health-score-card">
+          <div class="card-title">Overall Health Score</div>
+          <div class="score-circle" id="scoreCircle">
+            <span class="score-value" id="scoreValue">--</span>
+          </div>
+          <div class="lifecycle-badge" id="lifecycleBadge">--</div>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Activity</div>
+          <div class="metric-value" id="activityScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="activityProgress"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Diversity</div>
+          <div class="metric-value" id="diversityScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="diversityProgress"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Response Time</div>
+          <div class="metric-value" id="responseScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="responseProgress"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Code Quality</div>
+          <div class="metric-value" id="qualityScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="qualityProgress"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Documentation</div>
+          <div class="metric-value" id="docScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="docProgress"></div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Community</div>
+          <div class="metric-value" id="communityScore">--</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="communityProgress"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-section">
+        <h2 style="margin-bottom: 20px;">📊 Health Assessment</h2>
+        <div id="alerts"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>OpenPulse - Powered by OpenDigger, Apache IoTDB, EasyGraph & DataEase</p>
+      <p style="margin-top: 10px; font-size: 14px;">Let's keep open source alive and thriving! 🚀</p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:8000/api/v1';
+
+    // Parse repository input
+    function parseRepoInput(input) {
+      input = input.trim();
+
+      // If it's a URL
+      if (input.includes('github.com')) {
+        const match = input.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+        if (match) {
+          return { owner: match[1], repo: match[2].replace(/\.git$/, '') };
+        }
+      }
+
+      // If it's owner/repo format
+      const parts = input.split('/');
+      if (parts.length === 2) {
+        return { owner: parts[0], repo: parts[1] };
+      }
+
+      throw new Error('Invalid repository format. Use "owner/repo" or GitHub URL');
+    }
+
+    // Fetch health assessment
+    async function fetchHealthAssessment(owner, repo) {
+      const response = await fetch(`${API_BASE_URL}/health-assessment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform: 'github', owner, repo })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
+
+      return await response.json();
+    }
+
+    // Update UI with health data
+    function updateUI(owner, repo, healthData) {
+      // Update repo info
+      document.getElementById('repoTitle').textContent = `${owner}/${repo}`;
+      document.getElementById('repoUrl').textContent = `https://github.com/${owner}/${repo}`;
+
+      // Update health score
+      const score = Math.round(healthData.overall_score);
+      document.getElementById('scoreValue').textContent = score;
+
+      const scoreDeg = (score / 100) * 360;
+      document.getElementById('scoreCircle').style.setProperty('--score-deg', `${scoreDeg}deg`);
+
+      // Update lifecycle
+      document.getElementById('lifecycleBadge').textContent = healthData.lifecycle_stage.toUpperCase();
+
+      // Update metrics
+      updateMetric('activity', healthData.activity_score);
+      updateMetric('diversity', healthData.diversity_score);
+      updateMetric('response', healthData.response_time_score);
+      updateMetric('quality', healthData.code_quality_score);
+      updateMetric('doc', healthData.documentation_score);
+      updateMetric('community', healthData.community_atmosphere_score);
+
+      // Generate alerts
+      generateAlerts(score, healthData);
+    }
+
+    function updateMetric(name, value) {
+      const rounded = Math.round(value);
+      document.getElementById(`${name}Score`).textContent = rounded;
+      document.getElementById(`${name}Progress`).style.width = `${rounded}%`;
+    }
+
+    function generateAlerts(score, healthData) {
+      const alertsContainer = document.getElementById('alerts');
+      alertsContainer.innerHTML = '';
+
+      let alertLevel = 'green';
+      let alertTitle = '✅ Healthy Repository';
+      let alertMessage = 'This repository shows excellent health indicators across all dimensions.';
+
+      if (score < 40) {
+        alertLevel = 'red';
+        alertTitle = '🚨 Critical Health Issues';
+        alertMessage = 'This repository requires immediate attention. Multiple health indicators are below acceptable levels.';
+      } else if (score < 60) {
+        alertLevel = 'orange';
+        alertTitle = '⚠️ Health Concerns Detected';
+        alertMessage = 'Several health metrics are below optimal levels. Consider reviewing contributor engagement and activity patterns.';
+      } else if (score < 75) {
+        alertLevel = 'yellow';
+        alertTitle = '💡 Room for Improvement';
+        alertMessage = 'Repository is stable but could benefit from increased community engagement and activity.';
+      }
+
+      const alert = document.createElement('div');
+      alert.className = `alert ${alertLevel}`;
+      alert.innerHTML = `
+        <div class="alert-title">${alertTitle}</div>
+        <div>${alertMessage}</div>
+      `;
+      alertsContainer.appendChild(alert);
+
+      // Add specific recommendations
+      if (healthData.activity_score < 50) {
+        addAlert('orange', '📉 Low Activity', 'Commit and PR activity is below healthy levels. Consider organizing community events or hackathons.');
+      }
+      if (healthData.diversity_score < 50) {
+        addAlert('orange', '👥 Limited Diversity', 'Contributor diversity is low. Focus on onboarding new contributors and reducing barriers to entry.');
+      }
+      if (healthData.response_time_score < 50) {
+        addAlert('yellow', '⏱️ Slow Response Times', 'Issue response times could be improved. Consider adding more maintainers or improving triage processes.');
+      }
+    }
+
+    function addAlert(level, title, message) {
+      const alertsContainer = document.getElementById('alerts');
+      const alert = document.createElement('div');
+      alert.className = `alert ${level}`;
+      alert.innerHTML = `
+        <div class="alert-title">${title}</div>
+        <div>${message}</div>
+      `;
+      alertsContainer.appendChild(alert);
+    }
+
+    // Show/hide sections
+    function showLoading() {
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('results').classList.remove('active');
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('errorMessage').textContent = message;
+      document.getElementById('results').classList.remove('active');
+    }
+
+    function showResults() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('results').classList.add('active');
+    }
+
+    // Main analysis function
+    async function analyzeRepository(input) {
+      try {
+        showLoading();
+
+        const { owner, repo } = parseRepoInput(input);
+        const healthData = await fetchHealthAssessment(owner, repo);
+
+        updateUI(owner, repo, healthData);
+        showResults();
+
+      } catch (error) {
+        console.error('Error:', error);
+        showError(error.message || 'Failed to analyze repository. Make sure the OpenPulse API is running on http://localhost:8000');
+      }
+    }
+
+    // Event listeners
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('repoInput').value;
+      analyzeRepository(input);
+    });
+
+    document.querySelectorAll('.example-repo').forEach(el => {
+      el.addEventListener('click', () => {
+        const repo = el.getAttribute('data-repo');
+        document.getElementById('repoInput').value = repo;
+        analyzeRepository(repo);
+      });
+    });
+  </script>
+</body>
+</html>
