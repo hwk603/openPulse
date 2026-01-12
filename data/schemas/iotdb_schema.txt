@@ -1,0 +1,86 @@
+-- Apache IoTDB Time Series Schema for OpenPulse
+-- This schema defines the time series structure for storing repository metrics
+
+-- Root storage group
+CREATE STORAGE GROUP root.openpulse;
+
+-- Repository metrics storage groups
+CREATE STORAGE GROUP root.openpulse.repositories;
+
+-- Time series for health scores
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.overall_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.activity_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.diversity_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.response_time_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.code_quality_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.documentation_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.health.community_atmosphere_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+
+-- Time series for activity metrics
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.commits WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.pull_requests WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.issues WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.reviews WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.comments WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.activity.active_contributors WITH DATATYPE=INT32, ENCODING=RLE;
+
+-- Time series for OpenRank
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.metrics.openrank WITH DATATYPE=FLOAT, ENCODING=RLE;
+
+-- Time series for stars and forks
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.metrics.stars WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.metrics.forks WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.metrics.watchers WITH DATATYPE=INT32, ENCODING=RLE;
+
+-- Time series for response times (in hours)
+CREATE TIMESERIES root.openpulse.repositories.${p{owner}.${repo}.response.issue_response_hours WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.response.pr_review_hours WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.response.issue_close_days WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.response.pr_merge_days WITH DATATYPE=FLOAT, ENCODING=RLE;
+
+-- Time series for contributor churn predictions
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.contributors.${username}.churn_risk_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.contributors.${username}.behavioral_decay WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.contributors.${username}.network_marginalization WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.contributors.${username}.temporal_anomaly WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.contributors.${username}.community_engagement WITH DATATYPE=FLOAT, ENCODING=RLE;
+
+-- Time series for network metrics
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.total_nodes WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.total_edges WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.density WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.average_degree WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.modularity WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.${platform}.${owner}.${repo}.network.bus_factor WITH DATATYPE=INT32, ENCODING=RLE;
+
+-- Example: Create specific time series for apache/iotdb
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.overall_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.activity_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.diversity_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.response_time_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.code_quality_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.documentation_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.health.community_atmosphere_score WITH DATATYPE=FLOAT, ENCODING=RLE;
+
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.activity.commits WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.activity.pull_requests WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.activity.issues WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.activity.reviews WITH DATATYPE=INT32, ENCODING=RLE;
+
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.metrics.openrank WITH DATATYPE=FLOAT, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.metrics.stars WITH DATATYPE=INT32, ENCODING=RLE;
+CREATE TIMESERIES root.openpulse.repositories.github.apache.iotdb.metrics.forks WITH DATATYPE=INT32, ENCODING=RLE;
+
+-- Query examples:
+
+-- Query health score trend for last 30 days
+-- SELECT overall_score FROM root.openpulse.repositories.github.apache.iotdb.health WHERE time > now() - 30d;
+
+-- Query activity metrics for last month
+-- SELECT commits, pull_requests, issues FROM root.openpulse.repositories.github.apache.iotdb.activity WHERE time > now() - 1mo;
+
+-- Query all health dimensions
+-- SELECT * FROM root.openpulse.repositories.github.apache.iotdb.health WHERE time > now() - 7d;
+
+-- Aggregate queries
+-- SELECT avg(overall_score) FROM root.openpulse.repositories.github.apache.iotdb.health GROUP BY ([now() - 30d, now()), 1d);

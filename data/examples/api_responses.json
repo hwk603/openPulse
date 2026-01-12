@@ -1,0 +1,97 @@
+{
+  "health_assessment_response": {
+    "repository": {
+      "platform": "github",
+      "owner": "apache",
+      "repo": "iotdb"
+    },
+    "timestamp": "2025-01-13T00:00:00Z",
+    "overall_score": 87.5,
+    "health_level": "healthy",
+    "lifecycle_stage": "mature",
+    "dimensions": {
+      "activity": {
+        "score": 92.0,
+        "status": "excellent"
+      },
+      "diversity": {
+        "score": 85.0,
+        "status": "good"
+      },
+      "response_time": {
+        "score": 88.0,
+        "status": "good"
+      },
+      "code_quality": {
+        "score": 90.0,
+        "status": "excellent"
+      },
+      "documentation": {
+        "score": 82.0,
+        "status": "good"
+      },
+      "community_atmosphere": {
+        "score": 84.0,
+        "status": "good"
+      }
+    },
+    "warnings": [],
+    "recommendations": [
+      "Continue maintaining high code quality standards",
+      "Consider increasing documentation coverage"
+    ]
+  },
+  "churn_prediction_response": {
+    "repository": {
+      "platform": "github",
+      "owner": "apache",
+      "repo": "iotdb"
+    },
+    "contributor": {
+      "username": "user1"
+    },
+    "timestamp": "2025-01-13T00:00:00Z",
+    "churn_risk": {
+      "overall_score": 35.5,
+      "risk_level": "yellow",
+      "confidence": 0.82
+    },
+    "warning_level": "yellow",
+    "alert_message": "Contributor showing early signs of disengagement",
+    "recommendations": [
+      "Schedule 1-on-1 check-in",
+      "Offer new challenges or leadership roles"
+    ]
+  },
+  "network_analysis_response": {
+    "repository": {
+      "platform": "github",
+      "owner": "apache",
+      "repo": "iotdb"
+    },
+    "timestamp": "2025-01-13T00:00:00Z",
+    "network_metrics": {
+      "total_nodes": 67,
+      "total_edges": 234,
+      "density": 0.052,
+      "average_degree": 6.98,
+      "number_of_communities": 5,
+      "bus_factor": 8
+    },
+    "key_contributors": [
+      {
+        "username": "user1",
+        "degree_centrality": 0.85,
+        "betweenness_centrality": 0.72,
+        "pagerank": 0.045
+      }
+    ],
+    "structural_holes": [
+      {
+        "username": "user1",
+        "constraint": 0.28,
+        "bridge_score": 0.85
+      }
+    ]
+  }
+}

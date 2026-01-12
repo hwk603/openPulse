@@ -1,0 +1,20 @@
+{
+  "health_score_sample": {
+    "repository": {
+      "platform": "github",
+      "owner": "apache",
+      "repo": "iotdb"
+    },
+    "overall_score": 87.5,
+    "health_level": "healthy"
+  },
+  "churn_prediction_sample": {
+    "contributor": "user1",
+    "risk_score": 35.5,
+    "risk_level": "yellow"
+  },
+  "network_sample": {
+    "total_nodes": 67,
+    "bus_factor": 8
+  }
+}
