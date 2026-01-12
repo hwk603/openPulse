@@ -1,0 +1,57 @@
+# Simplified requirements for Windows development
+# Some packages may need pre-built wheels or system dependencies
+
+# Core Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Async Task Queue
+celery>=5.3.0
+redis>=5.0.0
+
+# Database & Storage
+apache-iotdb>=1.3.0
+# psycopg2-binary - requires PostgreSQL dev libraries on Windows
+sqlalchemy>=2.0.0
+
+# Graph Analysis
+easygraph>=1.2
+networkx>=3.2.0
+# python-igraph - may require compilation on Windows
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.26.0
+scipy>=1.11.0
+
+# HTTP Client
+httpx>=0.26.0
+aiohttp>=3.9.0
+requests>=2.31.0
+
+# Visualization & Reporting
+plotly>=5.18.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# Logging & Monitoring
+loguru>=0.7.0
+prometheus-client>=0.19.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+
+# Development
+black>=23.12.0
+flake8>=7.0.0
+# mypy - may have issues with some dependencies
